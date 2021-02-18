@@ -1,0 +1,109 @@
+<div class="main-content bg-default">
+  <!-- Header -->
+  <div class="header bg-gradient-primary py-4 py-lg-5">
+    <div class="container">
+      <div class="header-body text-center mb-7">
+        <div class="row justify-content-center">
+          <div class="col-lg-5 col-md-6 mt-5">
+            <h1 class="text-white">Welcome!</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="separator separator-bottom separator-skew zindex-100">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+  </div>
+  <!-- Page content -->
+  <div class="container mt--8 pb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7">
+        <div class="card bg-secondary shadow border-0">
+          <div class="card-body px-lg-5 py-lg-5">
+            <div class="alert alert-danger" [hidden]="!error">
+                {{ error }}
+              </div>
+            <div class="text-center text-muted mb-4">
+              <h2>Sign in</h2>
+            </div>
+            <form class="form-signin" #loginForm=ngForm (ngSubmit)="onSubmit()">
+              <div class="form-group mb-3">
+                <div class="input-group input-group-alternative">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Email" type="email" name="email" required autofocus [(ngModel)]="form.email">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-alternative">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Password" type="password" name="password" required [(ngModel)]="form.password">
+                </div>
+              </div>
+              <div class="custom-control custom-control-alternative custom-checkbox">
+                <input class="custom-control-input" id=" customCheckLogin" type="checkbox" name="remember_me" [(ngModel)]="form.remember_me">
+                <label class="custom-control-label" for=" customCheckLogin">
+                  <span class="text-muted">Remember me</span>
+                </label>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary my-4" [disabled]="!loginForm.valid">Sign in</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12 text-center">
+            <a [routerLink]="['/reset-password']" routerLinkActive="router-link-active" class="text-light"><small>Forgot password?</small></a>
+          </div>
+          <!-- <div class="col-6 text-right">
+            <a href="#" class="text-light"><small>Create new account</small></a>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div id="addModal" class="modal" style="background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);">
+
+  <div class="modal-dialog" permission="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+        <button type="button" class="close" (click)='closeAddModal()'>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editPermissionForm=ngForm>
+
+            <div class="form-group">
+                <div class="row">
+                  <div class='col-12'>
+                    <label for="student">Choose Student</label>
+                  </div>
+                  <div class='col-12'>
+                    <div class="radio" *ngFor="let st of students">
+                      <label><input type="radio" name="student" [(ngModel)]="name" value="{{st.id}}" required>  {{ st.indexNo }} - {{ st.user.name }}</label>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)='addModalSubmit()' [disabled]="!editPermissionForm.valid">Select</button>
+        <button type="button" class="btn btn-secondary" (click)='closeAddModal()'>Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Teacher extends Model
+{
+    protected $fillable = [
+        'user_id','gender','salary','joinDate'
+    ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function class()
+    {
+        return $this->hasOne(Classe::class);
+    }
+
+    public function timetable()
+    {
+        return $this->hasMany(TimeTable::class);
+    }
+
+    public function subjectGroup()
+    {
+        return $this->hasOne(SubjectGroup::class, 'id', 'subject_group_id');
+    }
+}

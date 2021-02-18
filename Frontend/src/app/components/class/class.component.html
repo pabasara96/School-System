@@ -1,0 +1,179 @@
+<div class="container">
+    <div class="card shadow my-4">
+      <div class="card-header border-0">
+          <div class="row" style="margin-top: 30px;">
+            <div class="col-6">
+              <h3 *ngIf="!isAdmin">Assigned Classes</h3>
+          </div>
+      </div>
+      <div class="table-responsive" *ngIf="!isAdmin">
+        <table class="table align-items-center table-flush text-center">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Grade</th>
+                <th scope="col">Results</th>
+                <th scope="col">Student Matrials</th>
+                <th scope="col">Time Table</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let class of classes">
+                <td>{{ class.grade }}-{{ class.sub_class }}</td>
+                <td><a href="javascript:void(0)" class="item"  [routerLink]="['/results']" [queryParams]="{id: '1'}" data-toggle="tooltip" data-placement="top" title="View User" style="padding-right: 10px;">
+                  <i class="fa fa-chart-line"></i>
+              </a></td>
+              <td><a href="javascript:void(0)" class="item"  [routerLink]="['/materials']" data-toggle="tooltip" data-placement="top" title="View User" style="padding-right: 10px;">
+                <i class="fa fa-book"></i>
+            </a></td>
+            <td><a href="javascript:void(0)" class="item"  [routerLink]="['/timetables']" data-toggle="tooltip" data-placement="top" title="View User" style="padding-right: 10px;">
+              <i class="fa fa-calendar-alt"></i>
+          </a></td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+      <!-- Nav tabs -->
+<!-- <ul class="nav nav-tabs" role="tablist" *ngIf="isAdmin">
+    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class=""></i></span> <span class="hidden-xs-down">All Classes</span></a> </li>
+    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Profile</span></a> </li>
+    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Messages</span></a> </li>
+</ul> -->
+<!-- Tab panes -->
+<h1 *ngIf="isAdmin">All Classes</h1>
+<div class="tab-content tabcontent-border" *ngIf="isAdmin">
+    <div class="tab-pane active" id="home" role="tabpanel">
+        <div class="col-md-3 col-6 text-right float-right mb-4">
+            <a class="text-white btn btn-info mr-5" (click)='add()'>Add New Class</a>
+          </div>
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush text-center">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Grade</th>
+                    <th scope="col">Teacher</th>
+                    <th scope="col">Teacher Profile</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let class of classes">
+                    <td>{{ class.grade }}-{{ class.sub_class }}</td>
+                    <td>{{class.teacher.user.name}}</td>
+                    <td><a href="javascript:void(0)" class="item"  [routerLink]="['/profile']" [queryParams]="{id: class.teacher.user.id}" data-toggle="tooltip" data-placement="top" title="View User" style="padding-right: 10px;">
+                      <i class="fa fa-user"></i>
+                  </a></td>
+                    <td>
+                        <a href="javascript:void(0)" class="item"  (click)='edit( class.id )' data-toggle="tooltip" data-placement="top" title="Edit" style="padding-right: 10px;">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="item"  (click)='delete( class.id )' data-toggle="tooltip" data-placement="top" title="Delete" style="padding-right: 10px;">
+                            <i class="fa fa-trash"></i>
+                          </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+    </div>
+    <div class="tab-pane  p-20" id="profile" role="tabpanel">2</div>
+    <div class="tab-pane p-20" id="messages" role="tabpanel">3</div>
+</div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- The Modal -->
+    <div id="editModal" class="modal" style="background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit Class</h5>
+                <button type="button" class="close" (click)='closeEditModal()'>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                      <div class="alert alert-danger" [hidden]="!error.grade">
+                          {{ error.grade }}
+                        </div>
+                      <div class="alert alert-danger" [hidden]="!error.sub_class">
+                          {{ error.sub_class }}
+                        </div>
+                        <div class="alert alert-danger" [hidden]="!error.teacher_id">
+                            {{ error.teacher_id }}
+                          </div>
+                <form #newUserForm=ngForm>
+                    <div class="form-group">
+                        <label for="name">Grade</label>
+                        <input type="text" class="form-control" id="name" name="grade" placeholder="Enter Grade"  required [(ngModel)]="data.grade"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Sub Class</label>
+                        <input type="text" class="form-control" id="name" name="sub_class" placeholder="Enter Sub Class"  required [(ngModel)]="data.sub_class"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Teacher</label>
+                        <select class="form-control pt-1" name="teacher_id" [(ngModel)]="data.teacher_id">
+                            <option *ngFor="let c of teachers" value="{{c.id}}">{{c.user.name}}</option>
+                          </select>
+                    </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary"  [disabled]="!newUserForm.valid" (click)='editsubmit()'>Save changes</button>
+                <button type="button" class="btn btn-secondary" (click)='closeEditModal()'>Close</button>
+              </div>
+            </div>
+          </div>
+
+    </div>
+
+    <!-- The Modal -->
+    <div id="addModal" class="modal" style="background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Add New Class</h5>
+                <button type="button" class="close" (click)='closeAddModal()'>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <div class="alert alert-danger" [hidden]="!error.grade">
+                      {{ error.grade }}
+                    </div>
+                  <div class="alert alert-danger" [hidden]="!error.sub_class">
+                      {{ error.sub_class }}
+                    </div>
+                    <div class="alert alert-danger" [hidden]="!error.teacher_id">
+                        {{ error.teacher_id }}
+                      </div>
+                <form #editUserForm=ngForm>
+
+                    <div class="form-group">
+                        <label for="name">Grade</label>
+                        <input type="text" class="form-control" id="name" name="grade" placeholder="Enter Grade"  required [(ngModel)]="data.grade"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Sub Class</label>
+                        <input type="text" class="form-control" id="name" name="sub_class" placeholder="Enter Sub Class"  required [(ngModel)]="data.sub_class"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Teacher</label>
+                        <select class="form-control pt-1" name="teacher_id" [(ngModel)]="data.teacher_id">
+                            <option *ngFor="let c of teachers" value="{{c.id}}">{{c.user.name}}</option>
+                        </select>
+                    </div>
+                </form>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)='addModalSubmit()' [disabled]="!editUserForm.valid">Save changes</button>
+                <button type="button" class="btn btn-secondary" (click)='closeAddModal()'>Close</button>
+              </div>
+            </div>
+          </div>
+    </div>

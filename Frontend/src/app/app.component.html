@@ -1,0 +1,26 @@
+<ng-snotify></ng-snotify>
+
+<!-- Preloader - spinners.css -->
+<div class="preloader">
+  <div class="lds-ripple">
+      <div class="lds-pos"></div>
+      <div class="lds-pos"></div>
+  </div>
+</div>
+
+
+<!-- Main wrapper -  pages.scss -->
+<div id="main-wrapper">
+
+    <app-nav></app-nav>       <!--Top Navigation Bar-->
+    <app-slider *ngIf="loggedIn"></app-slider> <!--Side navigation panel-->
+
+    <router-outlet *ngIf="!loggedIn"></router-outlet>
+    <div class="page-wrapper" *ngIf="loggedIn">
+
+      <router-outlet></router-outlet>   <!--Router Outlet-->
+
+      <footer class="footer text-center">Designed and Developed by Team PIONEER.</footer>
+    </div>
+
+</div>
